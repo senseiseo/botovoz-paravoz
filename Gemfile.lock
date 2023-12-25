@@ -1,0 +1,65 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (6.0.3.1)
+      activesupport (= 6.0.3.1)
+    activerecord (6.0.3.1)
+      activemodel (= 6.0.3.1)
+      activesupport (= 6.0.3.1)
+    activesupport (6.0.3.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+      zeitwerk (~> 2.2, >= 2.2.2)
+    addressable (2.8.6)
+      public_suffix (>= 2.0.2, < 6.0)
+    coderay (1.1.2)
+    concurrent-ruby (1.1.6)
+    domain_name (0.6.20231109)
+    ffi (1.16.3)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
+    http (5.1.1)
+      addressable (~> 2.8)
+      http-cookie (~> 1.0)
+      http-form_data (~> 2.2)
+      llhttp-ffi (~> 0.4.0)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
+    http-form_data (2.3.0)
+    i18n (1.8.3)
+      concurrent-ruby (~> 1.0)
+    llhttp-ffi (0.4.0)
+      ffi-compiler (~> 1.0)
+      rake (~> 13.0)
+    method_source (0.9.2)
+    minitest (5.20.0)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    public_suffix (5.0.4)
+    rake (13.1.0)
+    retryable (3.0.5)
+    sqlite3 (1.4.2)
+    telegram_workflow (1.8.0)
+      http
+      retryable
+    thread_safe (0.3.6)
+    tzinfo (1.2.7)
+      thread_safe (~> 0.1)
+    zeitwerk (2.3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activerecord
+  pry
+  rake (~> 13.1.0)
+  sqlite3
+  telegram_workflow
+
+BUNDLED WITH
+   2.4.22
