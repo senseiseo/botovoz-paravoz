@@ -1,4 +1,4 @@
-class Actions::ListAction < Actions::BaseActions
+class Actions::ListAction < Actions::BaseAction
   def initial
     on_redirect do
       available_actions = [
