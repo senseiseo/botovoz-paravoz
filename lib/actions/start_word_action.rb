@@ -1,4 +1,4 @@
-class Actions::StartWordActions < Actions::BaseActions
+class Actions::StartWordAction < Actions::BaseAction
   attr_reader :result
 
   def initial
@@ -21,7 +21,7 @@ class Actions::StartWordActions < Actions::BaseActions
         WordService.correct_attempts(@result[:object].id)
       end
 
-      redirect_to Actions::StartWordActions
+      redirect_to Actions::StartWordAction
     end
   end
 
@@ -51,6 +51,6 @@ class Actions::StartWordActions < Actions::BaseActions
   end
 
   def test
-    redirect_to Actions::ListActions
+    redirect_to Actions::ListAction
   end
 end

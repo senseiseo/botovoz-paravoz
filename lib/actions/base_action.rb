@@ -5,9 +5,7 @@ class Actions::BaseAction < TelegramWorkflow::Action
     trim_messages
 
     if params.message_text == "/cancel" || params.message_text == "/start"
-      redirect_to Actions::StartAction
-    elsif  params.message_text == "/change_language"
-      redirect_to Actions::Language::ChangeAction
+      redirect_to Actions::ListAction
     else
       super
     end
@@ -59,7 +57,7 @@ class Actions::BaseAction < TelegramWorkflow::Action
   def handle_error(error)
     logger.info "Произошла ошибка: #{error.message}"
 
-    redirect_to Actions::StartAction
+    redirect_to Actions::ListAction
   end
 
   def logger

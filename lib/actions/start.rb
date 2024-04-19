@@ -1,7 +1,7 @@
-class Actions::Start < Actions::BaseActions
+class Actions::Start < Actions::BaseAction
   def initial
     on_message do
-      redirect_to Actions::ListActions
+      redirect_to Actions::ListAction
     end
   end
 end

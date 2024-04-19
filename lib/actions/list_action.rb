@@ -1,4 +1,4 @@
-class Actions::ListActions < Actions::BaseActions
+class Actions::ListAction < Actions::BaseActions
   def initial
     on_redirect do
       available_actions = [
@@ -10,7 +10,7 @@ class Actions::ListActions < Actions::BaseActions
 
     on_message do
       next_action = if params.callback_data == "start"
-        Actions::StartWordActions
+        Actions::StartWordAction
       else
         client.send_message text: "❗️Incorrect action"
         :initial
