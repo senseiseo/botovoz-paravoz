@@ -1,7 +1,12 @@
-require "bundler/setup"
-require "telegram_workflow"
-require "date"
+require 'bundler/setup'
+if ENV['APP_ENV'] == 'development'
+  require 'dotenv/load'
+end
+require 'telegram_workflow'
+require 'date'
 require './lib/app_config'
+require 'i18n'
+require 'concurrent-ruby'
 require 'pry'
 
 require './models/user'
@@ -10,14 +15,6 @@ require './models/user_word_relation'
 
 module Actions
 end
-
-# dependencies = %w(
-#   /home/isildur/botovoz/lib/actions/*.rb
-#   /home/isildur/botovoz/lib/client.rb
-# )
-# dependencies.each do |path|
-#   Dir[path].each { |path| require_relative path }
-# end
 
 dependencies = %w(
   actions/*.rb
@@ -29,3 +26,5 @@ dependencies = %w(
 dependencies.each do |path|
   Dir[File.expand_path(File.join(__dir__, path))].each { |path| require_relative path }
 end
+
+I18n.load_path << Dir[File.expand_path('config/locales') + '/*.yml']

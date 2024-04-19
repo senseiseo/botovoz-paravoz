@@ -1,1 +1,11 @@
-config/secrets.yml
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+*.db
+.env
+/compose/*secrets*/**

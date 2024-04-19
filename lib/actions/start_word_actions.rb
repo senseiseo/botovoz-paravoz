@@ -10,10 +10,7 @@ class Actions::StartWordActions < Actions::BaseActions
         { text: "Не знаю слово", callback_data: "no" }]
       ]
 
-      client.send_message(
-        text: handle_word,
-        parse_mode: "MarkdownV2"
-      )
+      client.send_message(ext: handle_word, parse_mode: "MarkdownV2")
       client.send_actions "Выберите действие:", available_actions
     end
 

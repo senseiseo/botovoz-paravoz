@@ -1,14 +1,19 @@
-class Actions::BaseActions < TelegramWorkflow::Action
+class Actions::BaseAction < TelegramWorkflow::Action
   def shared
     return unless is_user_authorized?
 
-    if params.message_text == "/cancel"
-      redirect_to Actions::ListActions
-    elsif params.message_text == "/start"
-      redirect_to Actions::ListActions
+    trim_messages
+
+    if params.message_text == "/cancel" || params.message_text == "/start"
+      redirect_to Actions::StartAction
+    elsif  params.message_text == "/change_language"
+      redirect_to Actions::Language::ChangeAction
     else
       super
     end
+
+  rescue StandardError, NoMethodError => error
+    handle_error(error)
   end
 
   def is_user_authorized? = session.dig(:user_authorize, params.user_id) || user_authorization
@@ -23,5 +28,41 @@ class Actions::BaseActions < TelegramWorkflow::Action
       client.do_send_message(text: "Пользователь не найден.", parse_mode: "Markdown")
       false
     end
+  end
+
+  def store_message(message_id:, chat_id:)
+    session[:store_message] ||= []
+    session[:store_message] << { message_id: message_id, chat_id: chat_id }
+  end
+
+  def trim_messages
+    messages = session[:store_message]
+
+    return unless messages
+
+    if messages.length > 2
+      messages_to_delete = messages[0..-3]
+      messages_to_keep = messages[-2..-1]
+
+      Concurrent::Future.execute do
+        messages_to_delete.each do |message|
+          client.do_delete_message(chat_id: message[:chat_id], message_id: message[:message_id])
+        end
+      end
+
+      session[:store_message] = messages_to_keep
+    end
+  end
+
+  private
+
+  def handle_error(error)
+    logger.info "Произошла ошибка: #{error.message}"
+
+    redirect_to Actions::StartAction
+  end
+
+  def logger
+    @logger ||= TelegramWorkflow.config.logger
   end
 end

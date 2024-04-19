@@ -4,26 +4,25 @@ require 'pry'
 
 require 'sqlite3'
 require 'active_record'
-require 'yaml'
 
 namespace :db do
   desc 'Create the database'
   task :create do
-    connection_details = YAML.load(File.open('config/database.yml'))
+    connection_details =  AppConfig.instance.config.database
     ActiveRecord::Base.establish_connection(connection_details)
     ActiveRecord::Tasks::DatabaseTasks.create
   end
 
   desc 'Migrate the database'
   task :migrate do
-    connection_details = YAML.load(File.open('config/database.yml'))
+    connection_details =  AppConfig.instance.config.database
     ActiveRecord::Base.establish_connection(connection_details)
     ActiveRecord::Tasks::DatabaseTasks.migrate
   end
 
   desc 'Seed the database'
   task :seed do
-    connection_details = YAML.load(File.open('config/database.yml'))
+    connection_details =  AppConfig.instance.config.database
     ActiveRecord::Base.establish_connection(connection_details)
     seeds_file = File.join(__dir__, 'db', 'seeds.rb')
     load seeds_file

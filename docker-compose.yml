@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+ word-bot:
+    container_name: word-bot
+    command: make start.bot
+    restart: always
+    env_file:
+      - compose/env/database.env
+      - compose/env/rake.env
+      - compose/secrets.production/rake.env
+

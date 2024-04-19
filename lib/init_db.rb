@@ -5,15 +5,9 @@ require 'active_record'
 class InitDb
   class << self
     def establish_connection
-      configuration = YAML.load(IO.read(database_config_path))
+      configuration = AppConfig.instance.config.database
 
       ActiveRecord::Base.establish_connection(configuration)
-    end
-
-    private
-
-    def database_config_path
-      'config/database.yml'
     end
   end
 end
