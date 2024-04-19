@@ -4,15 +4,16 @@ class Actions::ListAction < Actions::BaseAction
       available_actions = [
         [{ text: "Начать изучение", callback_data: "start" }]
       ]
+
       pp available_actions
-      client.send_actions "Выберите действие:", available_actions
+      client.do_send_actions(text: "Выберите действие:", actions: available_actions)
     end
 
     on_message do
       next_action = if params.callback_data == "start"
         Actions::StartWordAction
       else
-        client.send_message text: "❗️Incorrect action"
+        client.do_send_message text: "❗️Incorrect action"
         :initial
       end
 

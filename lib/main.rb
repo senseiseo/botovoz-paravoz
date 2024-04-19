@@ -1,5 +1,5 @@
 require_relative "environment"
-require_relative "action_list"
+# require_relative "action_list"
 
 AppConfig.instance
 

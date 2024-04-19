@@ -5,9 +5,11 @@ end
 require 'telegram_workflow'
 require 'date'
 require './lib/app_config'
+require './lib/init_db'
 require 'i18n'
 require 'concurrent-ruby'
 require 'pry'
+require 'hashie/mash'
 
 require './models/user'
 require './models/word'

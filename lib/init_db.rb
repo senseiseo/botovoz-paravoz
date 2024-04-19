@@ -4,10 +4,8 @@ require 'active_record'
 
 class InitDb
   class << self
-    def establish_connection
-      configuration = AppConfig.instance.config.database
-
-      ActiveRecord::Base.establish_connection(configuration)
+    def establish_connection(config:)
+      ActiveRecord::Base.establish_connection(config.database)
     end
   end
 end

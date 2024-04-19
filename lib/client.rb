@@ -7,11 +7,6 @@ class Client < TelegramWorkflow::Client
     send_actions(text: text, actions: actions)
   end
 
-  def do_send_document(filename:, content:)
-    pp [:do_send_document, filename, content]
-    send_document(document: TelegramWorkflow::InputFile.new(StringIO.new(content), filename: filename))
-  end
-
   def send_actions(text:, actions:)
     send_message(text: text, reply_markup: { inline_keyboard: actions })
   end

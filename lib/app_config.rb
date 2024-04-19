@@ -20,7 +20,7 @@ class AppConfig
   def test? = env == 'test'
 
   def setup_database
-    InitDb.establish_connection
+    InitDb.establish_connection(config: config)
   end
 
   def group
