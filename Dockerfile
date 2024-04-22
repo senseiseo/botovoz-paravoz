@@ -1,26 +1,36 @@
-FROM ruby:3.0.2
+# Докер образ FROM ruby:3.1.2
+FROM arm32v7/ruby:3.1.2
 
-EXPOSE 3000
-
+# Установка локали ru_RU.UTF-8
 ENV LANG ru_RU.utf8
 ENV LANGUAGE ru_RU.UTF-8
 ENV LC_ALL ru_RU.UTF-8
-
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
-    locales \
-    tzdata && \
+    locales && \
     localedef -i ru_RU -c -f UTF-8 -A /usr/share/locale/locale.alias ru_RU.UTF-8 && \
-    cp /usr/share/zoneinfo/Europe/Moscow /etc/localtime && \
-    echo "Europe/Moscow" > /etc/timezone && \
     rm -rf /var/lib/apt/lists/*
 
-RUN bundle config --global frozen 1 && bundle config set --local without 'development test'
+# Установка часового пояса Europe/Moscow
+ENV TZ=Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN mkdir -p /app
-WORKDIR /app
+# Настройка Bundler
+RUN bundle config --global frozen 1
 
-COPY Gemfile Gemfile.lock /app/
-RUN bundle install --jobs 10
+# Создание рабочей директории приложения
+RUN mkdir -p /
+WORKDIR /
 
-COPY . /app/
+# Копирование Gemfile и Gemfile.lock, установка гемов
+COPY Gemfile Gemfile.lock /
+RUN bundle install --jobs 4 --retry 3
+
+# Копирование исходного кода приложения в контейнер
+COPY . /
+
+# Открытие порта (если необходимо)
+# EXPOSE 3000
+
+# docker run --rm --privileged multiarch/qemu-user-static:register --reset
+# docker build -t your-image-name -f Dockerfile .
