@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'pry'
+require './lib/app_config'
 
 require 'sqlite3'
+require 'hashie/mash'
 require 'active_record'
 
 namespace :db do
