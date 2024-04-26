@@ -1,5 +1,5 @@
 # Докер образ FROM ruby:3.1.2
-FROM arm32v7/ruby:3.1.2
+FROM ruby:3.1.2
 
 # Установка локали ru_RU.UTF-8
 ENV LANG ru_RU.utf8

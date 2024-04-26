@@ -32,7 +32,7 @@ class AppConfig
   end
 
   def config
-    @config.fetch(env, @config.default)
+    @config
   end
 
   private
@@ -43,4 +43,3 @@ class AppConfig
     @config = config_data
   end
 end
-
