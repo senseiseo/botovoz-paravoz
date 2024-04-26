@@ -1216,10 +1216,9 @@ words = words = [
 # transcription = make_transcription(word)
 # puts "#{word}: #{transcription}"
 
-
 words.each do |data|
   Word.find_or_create_by(word: data[:word]) do |word|
-    word.translation = data[:translate]
+    word.translation = data[:translate] || data[:translation]
     word.transcription = data[:transcription]
   end
 end

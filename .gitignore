@@ -9,3 +9,4 @@
 *.db
 .env
 /compose/*secrets*/**
+*.development.sqlite3
