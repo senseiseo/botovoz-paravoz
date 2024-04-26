@@ -5,13 +5,22 @@ class Actions::StartWordAction < Actions::BaseAction
     @result = WordService.find_word(session[:user_authorize][params.user_id][:user])
 
     on_redirect do
+      message = read_store_message(user_id: params.user_id)
       available_actions = [
         [{ text: "Знаю слово", callback_data: "yes" },
         { text: "Не знаю слово", callback_data: "no" }]
       ]
 
-      client.do_send_message(text: handle_word, parse_mode: "MarkdownV2")
-      client.do_send_actions(text: "Выберите действие:", actions: available_actions)
+      res = client.do_edit_message(text: handle_word,
+                                  chat_id: message[:chat_id],
+                                  message_id: message[:message_id],
+                                  actions: available_actions,
+                                  parse_mode: "MarkdownV2")
+
+      store_message(message_id: res.dig('result', 'message_id'),
+                    chat_id: params.chat_id,
+                    user_id: params.user_id,
+                    text: res.dig('result', 'text'))
     end
 
     on_message do

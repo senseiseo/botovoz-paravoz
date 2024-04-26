@@ -2,10 +2,8 @@ class Actions::BaseAction < TelegramWorkflow::Action
   def shared
     return unless is_user_authorized?
 
-    trim_messages
-
     if params.message_text == "/cancel" || params.message_text == "/start"
-      redirect_to Actions::ListAction
+      redirect_to Actions::ListAction, restart: true
     else
       super
     end
@@ -28,28 +26,22 @@ class Actions::BaseAction < TelegramWorkflow::Action
     end
   end
 
-  def store_message(message_id:, chat_id:)
-    session[:store_message] ||= []
-    session[:store_message] << { message_id: message_id, chat_id: chat_id }
+  def store_message(message_id:, chat_id:, user_id:, text:, overwrite_last: false)
+    session[:store_message] ||= {}
+    session[:store_message][user_id] ||= []
+
+    if overwrite_last && session[:store_message][user_id].length >= 2
+      session[:store_message][user_id][-2] = { message_id: message_id, chat_id: chat_id, text: text }
+    else
+      session[:store_message][user_id] << { message_id: message_id, chat_id: chat_id, text: text  }
+    end
   end
 
-  def trim_messages
-    messages = session[:store_message]
+  def read_store_message(user_id:)
+    data = session.dig(:store_message, user_id)
+    return [] unless data
 
-    return unless messages
-
-    if messages.length > 2
-      messages_to_delete = messages[0..-3]
-      messages_to_keep = messages[-2..-1]
-
-      Concurrent::Future.execute do
-        messages_to_delete.each do |message|
-          client.do_delete_message(chat_id: message[:chat_id], message_id: message[:message_id])
-        end
-      end
-
-      session[:store_message] = messages_to_keep
-    end
+    data.last
   end
 
   private
