@@ -7,7 +7,7 @@ TelegramWorkflow.configure do |config|
   config.start_action = Actions::Start
   config.session_store = TelegramWorkflow::Stores::InMemory.new
   config.client = Client
-  config.api_token = AppConfig.instance.config.telegram.token
+  config.api_token = "1406574904:AAHLL4mT_MkJekzRfa3KzAxfpqFFFELdfxg"
 end
 
 trap "SIGINT" do

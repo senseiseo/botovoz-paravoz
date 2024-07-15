@@ -11,6 +11,7 @@ class CreateUserWordRelations < ActiveRecord::Migration[6.0]
       t.boolean :hard_word, default: false
       t.integer :incorrect_attempts, default: 0
       t.integer :time_wrong, default: 0
+      t.datetime :next_review_time, default: nil
 
       t.timestamps
     end
