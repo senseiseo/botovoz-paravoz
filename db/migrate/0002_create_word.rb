@@ -1,11 +1,15 @@
-class CreateWord < ActiveRecord::Migration[6.0]
-  def change
-    create_table :words do |t|
-      t.string :word, null: false
-      t.string :translation, null: false
-      t.string :transcription, null: false
+require 'sequel'
 
-      t.timestamps
+Sequel.migration do
+  change do
+    create_table(:words) do
+      primary_key :id
+      String :word, null: false
+      String :translation, null: false
+      String :transcription, null: false
+      DateTime :created_at
+      DateTime :updated_at
+      index :word, unique: true
     end
   end
 end

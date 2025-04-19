@@ -16,9 +16,9 @@ class Actions::StartWordAction < Actions::BaseAction
 
     on_message do
       if params.callback_data == "yes"
-        WordService.incorrect_attempts(@result[:object].id)
+        WordService.success_count(@result[:object].id, session[:user_authorize][params.user_id][:user].id)
       elsif params.callback_data == "no"
-        WordService.correct_attempts(@result[:object].id)
+        WordService.mistake_count(@result[:object].id, session[:user_authorize][params.user_id][:user].id)
       end
 
       redirect_to Actions::StartWordAction

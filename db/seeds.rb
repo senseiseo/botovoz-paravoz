@@ -1,17 +1,7 @@
-require 'rubygems'
-require 'bundler/setup'
-require 'pry'
+require_relative '../lib/app_config'
+require_relative '../models/word'
 
-require 'sqlite3'
-require 'active_record'
-require 'yaml'
-
-connection_details = YAML.load(File.open('config/database.yml'))
-connection_details = YAML.load(File.open('config/database.yml'))
-ActiveRecord::Base.establish_connection(connection_details)
-
-class Word < ActiveRecord::Base
-end
+db = AppConfig.instance.db
 
 words = [
   {word: "a", transcription: "[эй]", translate: "определенный артикль, один из"},
@@ -1016,8 +1006,13 @@ words = [
 ]
 
 words.each do |data|
-  Word.find_or_create_by(word: data[:word]) do |word|
-    word.translation = data[:translate]
-    word.transcription = data[:transcription]
+  unless db[:words].where(word: data[:word]).any?
+    db[:words].insert(
+      word: data[:word],
+      translation: data[:transcription],
+      transcription: data[:translate]
+    )
   end
 end
+
+puts "Seeded #{words.size} words."

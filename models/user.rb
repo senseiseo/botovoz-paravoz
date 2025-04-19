@@ -1,6 +1,6 @@
-require 'active_record'
+require 'sequel'
 
-class User < ActiveRecord::Base
-  has_many :user_word_relations
-  has_many :words, through: :user_word_relations
+class User < Sequel::Model(AppConfig.instance.db[:users])
+  one_to_many :word_progress
+  many_to_many :words, join_table: :word_progress
 end

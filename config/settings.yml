@@ -1,31 +1,35 @@
 default: &default
   timeout: <%= ENV['TIMEOUT'] || 5 %>
   telegram:
-    token: <%= ENV['TELEGRAM_BOT_TOKEN']  %>
+    token: <%= ENV['TELEGRAM_BOT_TOKEN'] %>
     name: <%= ENV['TELEGRAM_BOT_NAME'] %>
     support_bot: <%= ENV['SUPPORT_BOT'] %>
   concurrent_ruby:
-    max_threads:  <%= ENV['MAX_THREADS'] || 10 %>
+    max_threads: <%= ENV['MAX_THREADS'] || 10 %>
     min_threads: <%= ENV['MIN_THREADS'] || 2 %>
     auto_terminate: <%= ENV['AUTO_TERMINATE'] || true %>
     idletime: <%= ENV['IDLETIME'] || 120 %>
-    max_queue:  <%= ENV['MAX_QUEUE'] || 10 %>
+    max_queue: <%= ENV['MAX_QUEUE'] || 10 %>
+  database: &default_database
+    adapter: postgres
+    host: <%= ENV['DB_HOST'] || 'localhost' %>
+    port: <%= ENV['DB_PORT'] || 5432 %>
+    database: <%= ENV['DB_NAME'] || 'word_learning_dev' %>
+    username: <%= ENV['DB_USER'] || 'postgres' %>
+    password: <%= ENV['DB_PASSWORD'] || '' %>
+    max_connections: 10
 
 development:
   <<: *default
   database:
-    adapter: sqlite3
-    database: db/development.sqlite3
-    pool: 5
-    timeout: 5000
-
-
-test:
-  <<: *default
+    <<: *default_database
+    database: <%= ENV['DB_NAME'] || 'word_learning_dev' %>
 
 production:
   <<: *default
+
+test:
+  <<: *default
   database:
-    pool: 5
-    timeout: 5000
-    url: <%= ENV['DATABASE_URL'] %>
+    <<: *default_database
+    database: <%= ENV['DB_NAME'] || 'word_learning_test' %>

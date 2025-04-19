@@ -1,11 +1,37 @@
-version: '3.4'
+version: '3.8'
+
 services:
- word-bot:
+  word-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: word-bot
-    command: make start.bot
     restart: always
     env_file:
       - compose/env/database.env
       - compose/env/rake.env
       - compose/secrets.production/rake.env
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+    networks:
+      - word-bot-network
 
+  postgres:
+    image: postgres:15
+    container_name: word-bot-postgres
+    restart: always
+    env_file:
+      - compose/env/database.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - word-bot-network
+
+volumes:
+  postgres_data:
+
+networks:
+  word-bot-network:
+    driver: bridge

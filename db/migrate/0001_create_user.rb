@@ -1,13 +1,16 @@
-class CreateUser < ActiveRecord::Migration[6.0]
-  def change
-    create_table :users do |t|
-      t.integer :uid, null: false
-      t.string :nick_name
-      t.integer :count
-      t.string :personal_chat_id
-      t.string :publick_chat_id
-      t.string :user_name
-      t.string :last_name
+require 'sequel'
+
+Sequel.migration do
+  change do
+    create_table(:users) do
+      primary_key :id
+      Integer :uid, null: false
+      String :nick_name
+      Integer :count
+      String :personal_chat_id
+      String :publick_chat_id
+      String :user_name
+      String :last_name
     end
   end
 end

@@ -1,5 +1,8 @@
+require 'sequel'
 require 'erb'
 require 'yaml'
+require 'hashie'
+require 'pry'
 
 class AppConfig
   include Singleton
@@ -20,7 +23,11 @@ class AppConfig
   def test? = env == 'test'
 
   def setup_database
-    InitDb.establish_connection(config: config)
+    @db = Sequel.connect(config.database)
+  end
+
+  def db
+    @db
   end
 
   def group
@@ -39,8 +46,11 @@ class AppConfig
 
   def load_config
     config_file = File.join(Dir.pwd, 'config', 'settings.yml')
-    config_data = Hashie::Mash.new(YAML.load((ERB.new(File.read(config_file))).result(binding)))
+    unless File.exist?(config_file)
+      raise "Config file not found at #{config_file}"
+    end
+    erb_content = ERB.new(File.read(config_file)).result(binding)
+    config_data = Hashie::Mash.new(YAML.load(erb_content, aliases: true))
     @config = config_data
   end
 end
-

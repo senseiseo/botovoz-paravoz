@@ -18,7 +18,7 @@ class Actions::BaseAction < TelegramWorkflow::Action
 
   def user_authorization
     user = UserManager.find_or_create_user(params.user_id, params)
-    if user.present?
+    if user
       session[:user_authorize] ||= {}
       session[:user_authorize][params.user_id] ||= { user_id: params.user_id, user: user }
       pp session[:user_authorize][params.user_id]
